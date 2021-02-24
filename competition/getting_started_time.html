@@ -1,0 +1,86 @@
+<h2>Get and prepare the practice data</h2>
+<p>
+  The trial data for the practice phase consists of 99 articles from the <em>AQUAINT</em>, <em>TimeBank</em> and <em>te3-platinum</em> subsets of <em>TempEval-2013</em>, i.e. <em>"Newswire"</em> domain.
+</p>
+<p>
+  You can automatically download and prepare the input data for this phase running the <code class="codestyle">prepare_time_dataset.py</code> script available in the <a href="https://github.com/Machine-Learning-for-Medical-Language/source-free-domain-adaptation" target="_blank">task repository</a>. If you don't already have the task repo checked out and the requirements installed, you need to do so first:
+</p>
+<pre class="prestyle">
+
+$ git clone https://github.com/Machine-Learning-for-Medical-Language/source-free-domain-adaptation.git && cd source-free-domain-adaptation
+
+$ pip3 install -r baselines/time/requirements.txt
+
+$ python3 prepare_time_dataset.py practice_text/
+
+</pre>
+<p>
+  This will create a <code class="codestyle">practice_text/time</code> directory containing the plain text of the <a href="https://github.com/Machine-Learning-for-Medical-Language/source-free-domain-adaptation/blob/master/practice_time_documents.txt" target="_blank">documents used in this task</a>.
+</p>
+
+<h2>Get the model and make predictions on the practice data</h2>
+<p>
+  The baseline for the time expression recognition is based on the pytorch implementation of <a href="https://huggingface.co/transformers/model_doc/roberta.html" target="_blank">RoBERTa</a> by <em>Hugging Face</em>.
+  We have used the <code class="codestyle"><a href="https://huggingface.co/transformers/model_doc/roberta.html?#robertafortokenclassification" target="_blank">RobertaForTokenClassification</a></code> architecture from <em>Hugging Face/transformers</em> library to fine-tune <code class="codestyle"><a href="https://huggingface.co/roberta-base" target="_blank">roberta-base</a></code> on 25,000+ time expressions in de-identified clinical notes.
+  The resulting model is a sequence tagger that we have made available in <em>Hugging Face</em> model hub: <a href="https://huggingface.co/clulab/roberta-timex-semeval" target="_blank">clulab/roberta-timex-semeval</a>.
+  The following table shows the <em>in-domain</em> and <em>out-of-domain (practice_data)</em> performances:
+<p style="padding-left: 30px;">
+<table class="results">
+<thead>
+<tr>
+<th></th>
+<th>P</th>
+<th>R</th>
+<th>F1</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>in-domain_data</td>
+<td>0.967</td>
+<td>0.968</td>
+<td>0.968</td>
+</tr>
+<tr>
+<td>practice_data</td>
+<td>0.775</td>
+<td>0.768</td>
+<td>0.771</td>
+</tr>
+</tbody>
+</table>
+</p>
+<p>
+  The task repository contains scripts to load and run the model: <code class="codestyle"><a href="https://github.com/Machine-Learning-for-Medical-Language/source-free-domain-adaptation/tree/master/baselines/time" target="_blank">time baseline</a></code>.
+  These scripts are based on the <em>Hugging Face/transformers</em> library that allows easily incorporating the model into the code.
+  See for example, <a href="https://github.com/Machine-Learning-for-Medical-Language/source-free-domain-adaptation/blob/master/baselines/time/run_time.py#L21">the code from the baseline that loads the model and its tokenizer</a>.
+</p>
+<p>
+  The first time you run such code, the model will be automatically downloaded in your computer.
+  The scripts also include the basic functionality to read the input data and produce the output <em>Anafora</em> annotations.
+  You can use the <code class="codestyle">run_time.py</code> script to parse raw text and obtain time expressions.
+  For example, to process the practice data, run:
+</p>
+<pre class="prestyle">
+  
+$ python3 baselines/time/run_time.py -p practice_text/time/ -o submission/time/
+
+</pre>
+<p>
+  This will create one directory per document in <code class="codestyle">submission/time</code> containing one <code class="codestyle">.xml</code> file with predictions in <em>Anafora</em> format.
+</p>
+
+<h2>Extend the baseline model</h2>
+<p>
+  There are many ways to try to improve the performance of this baseline on the practice text (and later, on the evaluation text).
+  Should you need to continue training the <code class="codestyle">clulab/roberta-timex-semeval</code> model on annotated data that you have somehow produced, you can run the <code class="codestyle">train_time.py</code> script:
+</p>
+<pre class="prestyle">
+
+$ python3 baselines/time/train_time.py -t /path/to/train-data -s /path/to/save-model
+
+</pre>
+<p>
+  The <code class="codestyle">train-data</code> directory must follow a similar structure to the <code class="codestyle">practice_text/time</code> folder and include, for each document, a the raw text file (with no extension) and an <em>Anafora</em> annotation file (with <code class="codestyle">.xml</code> extension).
+  After running the training, the <code class="codestyle">save-model</code> directory will contain three files (<code class="codestyle">pytorch_model.bin</code>, <code class="codestyle">training_args.bin</code> and <code class="codestyle">config.json</code>) with the configuration and weights of the final model, and the vocabulary and configuration files used by the tokenizer (<code class="codestyle">vocab.json</code>, <code class="codestyle">merges.txt</code>, <code class="codestyle">special_tokens_map.json</code> and <code class="codestyle">tokenizer_config.json</code>).
+</p>

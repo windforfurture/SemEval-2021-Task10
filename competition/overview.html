@@ -1,0 +1,28 @@
+<h1 style="color: grey;">Overview</h1>
+<h2>Welcome</h2>
+<p>This is the CodaLab Competition for SemEval-2021 Task 10: Source-Free Domain Adaptation for Semantic Processing.</p>
+<p><span>Please join our <a href="https://groups.google.com/forum/#!forum/source-free-domain-adaptation-participants/" target="_blank">Google Group</a>&nbsp;to ask questions and get the most up-to-date information on the task.</span></p>
+<div style="background-color: #eaeaea; width: 18em; margin: 0 auto; padding: 0.1em 1em 1em 1em;">
+<h3>Important Dates:</h3>
+    <table style="background-color: #eaeaea;">
+        <tr><th>31 Jul 2020:</th><td>&nbsp; Trial data release</td></tr>
+        <tr><th>4 Sep 2020:</th><td>&nbsp; Training data release</td></tr>
+        <tr><th>3 Dec 2020:</th><td>&nbsp; Test data release </td></tr>
+        <tr><th>10 Jan 2021:</th><td>&nbsp; Evaluation start</td></tr>
+        <tr><th>31 Jan 2021:</th><td>&nbsp; Evaluation end</td></tr>
+    </table>
+</div>
+<h2>Summary</h2>
+<p>Data sharing restrictions are common in NLP datasets. For example, Twitter policies do not allow sharing of tweet text, though tweet IDs may be shared. The situtation is even more common in clinical NLP, where patient health information must be protected, and annotations over health text, when released at all, often require the signing of complex data use agreements. The SemEval-2021 Task 10 framework asks participants to develop semantic annotation systems in the face of data sharing constraints. A participant's goal is to develop an accurate system for a target domain when annotations exist for a related domain but cannot be distributed. Instead of annotated training data, participants are given a model trained on the annotations. Then, given unlabeled target domain data, they are asked to make predictions.</p>
+<h2>Tracks</h2>
+<p>We propose two different semantic tasks to which this framework will be applied: negation detection and time expression recognition.</p>
+<ul>
+<li><strong>Negation detection</strong> asks participants to classify clinical event mentions (e.g., diseases, symptoms, procedures, etc.) for whether they are being negated by their context. For example, the sentence: <em>Has no diarrhea and no new lumps or masses</em> has three relevant events (diarrhea, lumps, masses), two cue words (both <em>no</em>), and all three entities are negated. This task is important in the clinical domain because it is common for physicians to document negated information encountered during the clinical course, for example, when ruling out certain elements of a differential diagnosis. We expect most participants will treat this as a "span-in-context"' classification problem, where the model will jointly consider both the event to be classified and its surrounding context. For example, a typical transformer-based encoding of this problem for the <em>diarrhea</em> event in the example above looks like: <em>Has no &lt;e&gt;diarrhea&lt;/e&gt; and no new lumps or masses</em>.</li>
+<li><strong>Time expression recognition</strong> asks participants to find time expressions in text. This is a sequence-tagging task that will use the fine-grained time expression annotations that were a component of SemEval 2018 Task 6 (Laparra et al. 2018). For example:<br /><br /><img style="display: block; margin-left: auto; margin-right: auto;" src="https://i.ibb.co/tbmjZkh/time-example.png" alt="" /><br /><br />We expect most participants will treat this as a sequence classification problem, as in other named-entity tagging tasks.</li>
+</ul>
+<h2>Organizers</h2>
+<p>Egoitz Laparra, Yiyun Zhao, Steven Bethard (University of Arizona)</p>
+<p>Tim Miller (Boston Children's Hospital and Harvard Medical School)</p>
+<p>Özlem Uzuner (George Mason University)</p>
+<h2>References</h2>
+<p>Laparra E., Xu D., Elsayed A., Bethard S., and Palmer M. <a href="https://www.aclweb.org/anthology/S18-1011.pdf" target="_blank">SemEval 2018 task 6: Parsing time normalizations.</a> In Proceedings of The 12th International Workshop on Semantic Evaluation, New Orleans, Louisiana. 2018.</p>

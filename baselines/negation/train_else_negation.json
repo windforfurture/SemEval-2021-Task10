@@ -1,0 +1,4 @@
+{"model_name_or_path":"tmills/roberta_sfda_sharpseed",
+  "data_dir":"path/negation", "output_dir":"path/negation/model/tmills/roberta_sfda_sharpseed",
+  "overwrite_output_dir": "False","do_train": "True"
+}
